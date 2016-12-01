@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title text="City Events"/>
+    <meta name="robots" content="index,follow" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no, width=device-width' />
+    <link rel="icon" href="" />
+    <style>
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+				font-size: 14px;
+			}
+			#header {
+				height: 68px;
+				background-color:  #4CAF50;
+				position: relative;
+				z-index: 1;
+			}
+
+			.size {
+				width: 720px;
+				margin: 0 auto;
+			}
+
+			#results {
+				background-color: #F4F4F4;
+				border-bottom: 1px solid #AAA;
+				padding: 5px 0;
+			}
+
+		</style>
+</head>
+<body>
+
+    <div id="header"></div>
+    <div id="results">
+        <div class="size">
+            <strong><div th:text="${days}" class="top"></div></strong>
+        </div>
+    </div>
+    <div id="content" class="size">
+        <div class="list">
+            <h4>Events </h4>
+            <div th:each="cityMap : ${weeksEvents}" class="">
+                <h2 th:text="${cityMap.key}" class="header"></h2>
+                <div th:each="cityEvent : ${cityMap.value}" class="item center">
+                    <div class="pic left">
+                        <img class="pic-url" th:src="${cityEvent.picUrl}"/>
+                    </div>
+
+                    <div class="address right">
+
+                    </div>
+                    <div class="main center">
+                        <div class="title">
+                            <div th:text="${cityEvent.eventName} "></div>
+                        </div>
+                        <div class="category">
+                            <div th:text="${cityEvent.company}" class="company"></div>
+                            <div th:text="'Cost:' + ${cityEvent.price} + ' '"></div>
+                            <div th:text="'Ages:' + ${cityEvent.ageLower} + ' - ' + ${cityEvent.ageUpper}"></div>
+                            <div th:text="'Times:' + ${cityEvent.startTime} + ' ' + ${cityEvent.endTime} "></div>
+                            <a th:href="${cityEvent.pageUrl}">Website</a>
+                        </div>
+                        <div th:text="${cityEvent.description}" class="description"></div>
+                    </div>
+                </div>
+            </div>
+           
+            <a th:href="'/' + ${prevLink}" th:text="'Prev ' + ${prevLink}" class="nav-link-left"></a>
+            <a th:href="'/' + ${nextLink}" th:text="'Next ' + ${nextLink}" class="nav-link-right"></a>
+        </div>
+    </div>
+    <script th:src="@{/frontend/js/jquery-1.12.4.min.js} + '?v=1'"/>
+</body>
+</html>
