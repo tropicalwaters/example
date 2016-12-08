@@ -151,3 +151,62 @@ public class CityEvent {
     }
 
 }
+
+ "SELECT row_to_json(row.*) AS example_json " +
+ "FROM (SELECT cg.campground_id, " +
+        "COALESCE(pic.activity_list, '{}') as activity_list, " +
+        "FROM example.example cg " +
+            "LEFT JOIN (SELECT example_id, array_agg(p.activity_list) AS activity_list " + 
+        ") AS row",
+
+class CampgroundMapper implements RowMapper<Example> {
+    ObjectMapper objectMapper = new ObjectMapper();
+    @Override
+    public Example mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Example campground = null;
+        try {
+            campground = objectMapper.readValue(rs.getString("example_json"), Example.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return campground;
+    }
+}
+
+package com.example.Model;
+
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.*;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class Campground {
+
+    private Set<String> activityList;
+
+    @JsonIgnore
+    private List<String> picUrlList;
+
+   
+    @JsonCreator
+    public Campground(
+        // list
+            @JsonProperty("activity_list") String[] activities,
+         ) {
+        activityList = new TreeSet<>();
+        for (String activity: activities) {
+            activityList.add(activity);
+        }
+    }
+
+    // single value
+    @JsonSetter("campground_id")
+    public void setId(int example) {
+        this.example = example;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+}
