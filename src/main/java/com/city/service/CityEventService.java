@@ -31,9 +31,16 @@ public class CityEventService {
 
     Calendar cal = Calendar.getInstance();
 
+    // step_oid -> step object
+    private Map<String, Step> stepMap = new HashMap<>();
+
+
+
     // server load
-    public void loadAllEventsIntoMemory() throws Exception {
-        // build
+    public void loadObjectsIntoMemory() throws Exception {
+        // common steps
+        dao.getAllSteps()
+
         dao.getAllCityEvents().forEach(cityEvent -> {
             if(!cityToDateToEventMap.containsKey(cityEvent.getCityKey())) {
                 cityToDateToEventMap.put(cityEvent.getCityKey(), new HashMap<>());
